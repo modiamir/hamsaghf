@@ -1,0 +1,157 @@
+{% extends "::profile_layout.html.twig" %}
+
+{% block main_content %}
+    <h1 class="ui dividing header">
+        آگهی ها
+    </h1>
+
+    <h3 class="ui header">آگهی های خانه</h3>
+
+
+    <table class="ui compact celled definition table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>تاریخ ایجاد</th>
+            <th>تاریخ بروزرسانی</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if householders is not empty %}
+            {% for householder in householders %}
+                <tr>
+                    <td>{{ householder.id }}</td>
+                    <td>{{ householder.created | jdate('Y-m-j') }}</td>
+                    <td>{{ householder.updated | jdate('Y-m-j') }}</td>
+                    <td>
+                        <div class="ui small buttons">
+                            <a href="{{ url("profile_manage", {"profile": householder.id, "context": "householder"}) }}" class="ui button">ویرایش</a>
+                            <div class="or"></div>
+                            <button data-url="{{ url('profile_remove', {"context":"householder", "profile": householder.id}) }}" class="ui button remove">حذف</button>
+                            <div class="or"></div>
+                            <button class="ui button">غیر فعال</button>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3">
+                    هیچ آگهی خانه ای موجود نیست.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+        <tfoot class="full-width">
+        <tr>
+            <th></th>
+            <th colspan="3">
+                {% if householders is not empty %}
+                    {% set disabled = " disabled" %}
+                {% else %}
+                    {% set disabled = "" %}
+                {% endif %}
+                <a href="{{ url("profile_manage", {"context": "householder"}) }}" class="ui right floated small primary labeled icon button {{ disabled }}">
+                    <i class="user icon"></i> افزودن آگهی
+                </a>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+
+    <h3 class="ui header">آگهی های هم خانه</h3>
+
+
+    <table class="ui compact celled definition table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>تاریخ ایجاد</th>
+            <th>تاریخ بروزرسانی</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if housemates is not empty %}
+            {% for housemate in housemates %}
+                <tr>
+                    <td>{{ housemate.id }}</td>
+                    <td>{{ housemate.created | jdate('Y-m-j') }}</td>
+                    <td>{{ housemate.updated | jdate('Y-m-j') }}</td>
+                    <td>
+                        <div class="ui small buttons">
+                            <a href="{{ url("profile_manage", {"context":"housemate", "profile": housemate.id}) }}" class="ui button">ویرایش</a>
+                            <div class="or"></div>
+                            <button data-url="{{ url('profile_manage', {"context":"housemate", "profile": housemate.id}) }}" class="ui button remove">حذف</button>
+                            <div class="or"></div>
+                            <button class="ui button">غیر فعال</button>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5">
+                    هیچ آگهی همخانه ای موجود نیست.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+        <tfoot class="full-width">
+        <tr>
+            <th></th>
+            <th colspan="4">
+                {% if housemates is not empty %}
+                    {% set disabled = " disabled" %}
+                {% else %}
+                    {% set disabled = "" %}
+                {% endif %}
+                <a href="{{ url("profile_manage",{"context":"housemate"}) }}" class="ui right floated small primary labeled icon button {{ disabled }}">
+                    <i class="user icon"></i> افزودن آگهی
+                </a>
+
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+
+    {% include ':modal:delete-approve.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('button.remove').click(function(ev) {
+            var self = this;
+
+            $('.ui.basic.modal.delete')
+                .modal({
+                    closable  : false,
+                    onDeny    : function(){
+                    },
+                    onApprove : function() {
+                        $.ajax({
+                            url: $(self).data('url'),
+                            type: "DELETE",
+                            success: function(result) {
+                                tr = $(self).closest('tr')[0];
+                                tbody = $(tr).closest('tbody')[0];
+                                $(self).closest('tr').remove();
+                                var childrencount = $(tbody).children().length;
+                                if (childrencount == 0) {
+                                    $(tbody).closest('table').find('tfoot a.button').removeClass('disabled');
+                                }
+                            },
+                            error: function(responseErr) {
+                                alert('خطایی رخ داده است.')
+                            }
+                        });
+                    }
+                })
+                .modal('show')
+            ;
+
+        })
+    </script>
+{% endblock %}

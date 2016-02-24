@@ -1,0 +1,48 @@
+{% extends 'default/layout.html.twig' %}
+
+{% block content %}
+    <h1>
+        ثبت نام
+    </h1>
+    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+        <div class="two fields">
+            <div class="field required">
+                {{ form_label(form.fullName) }}
+                {{ form_widget(form.fullName) }}
+            </div>
+            <div class="field required">
+                {{ form_label(form.phone) }}
+                {{ form_widget(form.phone) }}
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field required">
+                {{ form_label(form.plainPassword.first) }}
+                {{ form_widget(form.plainPassword.first) }}
+            </div>
+            <div class="field required">
+                {{ form_label(form.plainPassword.second) }}
+                {{ form_widget(form.plainPassword.second) }}
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field required">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <div class="field required">
+            <div>
+                {{ form_label(form.gender) }}
+                {{ form_widget(form.gender, {'attr': {'class': 'inline fields'}}) }}
+            </div>
+        </div>
+        <div class="field required">
+            <div class="ui checkbox">
+                {{ form_widget(form.termsAccepted) }}
+                {{ form_label(form.termsAccepted) }}
+            </div>
+        </div>
+        <button class="ui button" type="submit">ثبت نام</button>
+    {{ form_end(form) }}
+{% endblock %}

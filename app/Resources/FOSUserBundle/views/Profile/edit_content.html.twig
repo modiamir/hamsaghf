@@ -1,0 +1,87 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit ui form' } }) }}
+    <div class="two fields">
+        <div class="field required">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="field required">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+        </div>
+    </div>
+    <div class="field required">
+        <div>
+            {{ form_label(form.gender) }}
+            {{ form_widget(form.gender, {'attr': {'class': 'inline fields'}}) }}
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            {{ form_label(form.plainPassword.first) }}
+            {{ form_widget(form.plainPassword.first) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.plainPassword.second) }}
+            {{ form_widget(form.plainPassword.second) }}
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field required">
+            {{ form_label(form.current_password) }}
+            {{ form_widget(form.current_password) }}
+        </div>
+    </div>
+
+    <h4 class="ui">تصاویر</h4>
+    <table class="ui very basic collapsing celled table photos-wrapper" data-number-of-files="{{ profile.photo ? 1 : 0 }}">
+        <thead>
+        <tr><th></th>
+            <th>عملیات</th>
+        </tr></thead>
+        <tbody>
+        {% if profile.photo is not empty %}
+
+                <tr>
+                    <td>
+                        <h4 class="ui image header">
+                            <a href="/{{ profile.photo.webPath }}" data-lightbox="{{ profile.photo.id }}" >
+                                <img class="ui mini rounded image" src="{{ profile.photo.webPath |imagine_filter('thumb') }}" />
+                            </a>
+                        </h4>
+                    </td>
+                    <td>
+                        <a  data-status="0" data-file-id="{{ profile.photo.id }}" class="ui button small red existing-image">حذف</a>
+                    </td>
+                </tr>
+        {% else %}
+            <tr></td>
+                <td colspan="2">
+                    there is no image
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+        <tfoot class="full-width">
+        <tr>
+            <th>
+                <div id="progress"><div class="bar" style="width: 0%;"></div></div>
+            </th>
+            <th colspan="4">
+                <label for="fileupload" class="ui small button green">
+                    انتخاب فایل
+                    <input style="display: none" id="fileupload" type="file" name="files[]" data-url="/app_dev.php/media/upload/image" multiple >
+                </label>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+    <div>
+        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" class="ui button" />
+    </div>
+
+{% include ':modal:delete-approve.html.twig' %}
+
+{% include ':modal:upload-limit.html.twig' %}
+{{ form_end(form) }}

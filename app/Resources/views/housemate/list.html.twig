@@ -1,0 +1,25 @@
+<div class="card">
+
+    <div class="image">
+        {% if profile.user.photo %}
+            <img class="ui rounded image" src="{{ profile.user.photo.webPath |imagine_filter('medium_thumb') }}" />
+        {% elseif profile.user.gender == "male" %}
+            <img class="ui rounded image" src="{{ 'bundles/app/images/default_man.jpg' |imagine_filter('medium_thumb') }}" />
+        {% else %}
+            <img class="ui rounded image" src="{{ 'bundles/app/images/default_woman.jpg' |imagine_filter('medium_thumb') }}" />
+        {% endif %}
+    </div>
+
+    <div class="content">
+        <div class="header">{{ profile.title }}</div>
+        <div class="description">
+            {{ profile.description }}
+        </div>
+    </div>
+    <div class="extra content">
+                <span class="right floated">
+                    {{ profile.updated | jdate("l j F Y H:i") }}
+                </span>
+
+    </div>
+</div>

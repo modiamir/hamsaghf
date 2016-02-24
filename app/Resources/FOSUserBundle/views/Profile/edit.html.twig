@@ -1,0 +1,133 @@
+{% extends "profile_layout.html.twig" %}
+
+{% block main_content %}
+{% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+{% endblock main_content %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("bundles/app/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js") }}"></script>
+    <script src="{{ asset("bundles/app/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js") }}"></script>
+    <script src="{{ asset("bundles/app/bower_components/blueimp-file-upload/js/jquery.fileupload.js") }}"></script>
+    <script src="{{ asset("bundles/app/bower_components/lightbox2/dist/js/lightbox.min.js") }}"></script>
+
+
+    <script>
+        $(document).ready(function(){
+
+            $collectionHolder = $('table.photos-wrapper tbody');
+            $collectionHolder.data('index', $collectionHolder.find(':input[type="hidden"]').length);
+            $('#fileupload').fileupload({
+                dataType: 'json',
+                acceptFileTypes: '/(\.|\/)(gif|jpe?g|png)$/i',
+                maxFileSize: 10000000,
+                maxNumberOfFiles: 5,
+
+                done: function (e, data) {
+                    console.info('done', data);
+                    data.context.find('td:nth-child(1)').text('بارگذاری شده');
+                    data.context.find('td:nth-child(2) button.remove')
+                            .data('status', 2)
+                            .data('fileId', data.result.files[0].id);
+                    data.context.find('td:nth-child(2) button.upload').remove()
+                    addPhotoForm($collectionHolder, data.context, data.result.files[0].id)
+                },
+                add: function (e, data) {
+                    if ($('table.photos-wrapper').data('numberOfFiles') == 5) {
+                        $('.ui.basic.modal.upload-limit')
+                                .modal('show')
+                        ;
+                        return false;
+                    }
+                    var numberOfFiles = $('table.photos-wrapper').data('numberOfFiles');
+                    $('table.photos-wrapper').data('numberOfFiles', numberOfFiles + 1);
+
+                    console.info('add', data);
+                    $tr = $('<tr/>');
+                    $td1 = $('<td/>').text('بارگذاری نشده');
+                    $td2 = $('<td/>');
+//                    $item = $('<tr><td>Not uploaded</td><td></td></tr>').appendTo($collectionHolder);
+                    $upButton = $('<button/>').attr('class', 'ui button small blue upload').text('بارگذاری').click(function (ev) {
+                        ev.preventDefault();
+                        data.context.find('td:nth-child(1)').text('در حال بارگذاری ...')
+                        data.submit();
+                    });
+
+                    $rmButton = $('<button/>')
+                            .attr('class', 'ui button small red remove')
+                            .text('حذف')
+                            .data('status', 1)
+                            .click(removeImage);
+
+                    $upButton.appendTo($td2);
+                    $rmButton.appendTo($td2);
+                    $td1.appendTo($tr);
+                    $td2.appendTo($tr);
+                    $tr.appendTo($collectionHolder);
+
+                    data.context = $tr;
+                },
+                fail: function (e, data) {
+                    if (data.jqXHR.status == 500) {
+                        alert('خطا در بارگذاری');
+                        data.context.find('td:nth-child(1)').text(data.jqXHR.responseText);
+                        data.context.find('td:nth-child(2) button.upload').remove()
+                    } else {
+                        alert('حجم فایل بارگذاری شده بیشتر از حد مجاز است.');
+                        data.context.find('td:nth-child(1)').text('خطای بارگذاری');
+                        data.context.find('td:nth-child(2) button.upload').remove()
+                    }
+                },
+                progressall: function (e, data) {
+                    console.log(data);
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress .bar').css(
+                            'width',
+                            progress + '%'
+                    );
+                },
+            });
+        })
+
+        removeImage = function(ev) {
+            ev.preventDefault();
+            var self = this;
+            $('.ui.basic.modal.delete')
+                    .modal({
+                        closable  : false,
+                        onDeny    : function(){
+                        },
+                        onApprove : function() {
+                            $('#fos_user_profile_form_photo').prop('value', "");
+                            $(self).closest('tr').remove();
+                            $('table.photos-wrapper').data('numberOfFiles', 0);
+                        }
+                    })
+                    .modal('show')
+            ;
+        }
+
+        $('.existing-image').click(removeImage);
+
+        function addPhotoForm($collectionHolder, $context, fileId) {
+            alert()
+            $context.data('fileId', fileId);
+            $context.attr('fileId', fileId);
+            $('#fos_user_profile_form_photo').prop('value', fileId.toString())
+        }
+
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("bundles/app/bower_components/lightbox2/dist/css/lightbox.min.css") }}">
+    <style>
+        .bar {
+            height: 18px;
+            background: green;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends ':profile:search_layout.html.twig' %}
+
+{% block search_content %}
+    <h2 class="ui">Householders</h2>
+
+    <div class="ui divided items">
+        {% for profile in pagination %}
+            {{ include(':householder:list.html.twig', {"profile": profile}) }}
+        {% endfor %}
+    </div>
+{% endblock %}

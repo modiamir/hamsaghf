@@ -1,0 +1,33 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register ui form'}}) }}
+    <div class="two fields">
+        <div class="field required">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="field required">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field required">
+            {{ form_label(form.plainPassword.first) }}
+            {{ form_widget(form.plainPassword.first) }}
+        </div>
+        <div class="field required">
+            {{ form_label(form.plainPassword.second) }}
+            {{ form_widget(form.plainPassword.second) }}
+        </div>
+    </div>
+    <div class="field required">
+        <div>
+            {{ form_label(form.gender) }}
+            {{ form_widget(form.gender, {'attr': {'class': 'inline fields'}}) }}
+        </div>
+    </div>
+    <div>
+        <input type="submit" class="ui button" value="{{ 'registration.submit'|trans }}" />
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,260 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use FOS\UserBundle\Model\User as BaseUser;
+
+
+/**
+ * User
+ *
+ * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ */
+class User extends BaseUser
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="full_name", type="string", length=255, nullable=true)
+     */
+    private $fullName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255, unique=true, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var bool
+     *
+     * @Assert\Choice(choices={"male", "female"})
+     * @ORM\Column(name="gender", type="string", nullable=true)
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $apiKey;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PhoneVerificationCode", mappedBy="user")
+     */
+    private $phoneVerificationCodes;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Householder", mappedBy="user")
+     */
+    private $householder;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Housemate", mappedBy="user")
+     */
+    private $housemate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image")
+     */
+    private $photo;
+
+    /**
+     * Set fullName
+     *
+     * @param string $fullName
+     * @return User
+     */
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    /**
+     * Get fullName
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param boolean $gender
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return boolean 
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set apiKey
+     *
+     * @param string $apiKey
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    /**
+     * Get apiKey
+     *
+     * @return string 
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * Add phoneVerificationCodes
+     *
+     * @param \AppBundle\Entity\PhoneVerificationCode $phoneVerificationCodes
+     * @return User
+     */
+    public function addPhoneVerificationCode(\AppBundle\Entity\PhoneVerificationCode $phoneVerificationCodes)
+    {
+        $this->phoneVerificationCodes[] = $phoneVerificationCodes;
+
+        return $this;
+    }
+
+    /**
+     * Remove phoneVerificationCodes
+     *
+     * @param \AppBundle\Entity\PhoneVerificationCode $phoneVerificationCodes
+     */
+    public function removePhoneVerificationCode(\AppBundle\Entity\PhoneVerificationCode $phoneVerificationCodes)
+    {
+        $this->phoneVerificationCodes->removeElement($phoneVerificationCodes);
+    }
+
+    /**
+     * Get phoneVerificationCodes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhoneVerificationCodes()
+    {
+        return $this->phoneVerificationCodes;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return $this
+     */
+    public function setEmail($email)
+    {
+        $email = is_null($email) ? '' : $email;
+        parent::setEmail($email);
+        $this->setUsername($email);
+
+        return $this;
+    }
+
+    /**
+     * Set householder
+     *
+     * @param \AppBundle\Entity\Householder $householder
+     * @return User
+     */
+    public function setHouseholder(\AppBundle\Entity\Householder $householder = null)
+    {
+        $this->householder = $householder;
+
+        return $this;
+    }
+
+    /**
+     * Get householder
+     *
+     * @return \AppBundle\Entity\Householder 
+     */
+    public function getHouseholder()
+    {
+        return $this->householder;
+    }
+
+    /**
+     * Set housemate
+     *
+     * @param \AppBundle\Entity\Housemate $housemate
+     * @return User
+     */
+    public function setHousemate(\AppBundle\Entity\Housemate $housemate = null)
+    {
+        $this->housemate = $housemate;
+
+        return $this;
+    }
+
+    /**
+     * Get housemate
+     *
+     * @return \AppBundle\Entity\Housemate
+     */
+    public function getHousemate()
+    {
+        return $this->housemate;
+    }
+}

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/app/semantic/dist/semantic.rtl.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/app/stylesheets/style.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    <!-- jQuery -->
+    <script src="{{ asset('bundles/app/bower_components/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/semantic/dist/semantic.min.js') }}"></script>
+    <script>
+        $(document)
+            .ready(function() {
+
+                // fix menu when passed
+                $('.masthead')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function() {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function() {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                ;
+
+                // create sidebar and attach to menu open
+                $('.ui.sidebar')
+                    .sidebar('attach events', '.toc.item')
+                ;
+
+                $('.message .close')
+                    .on('click', function() {
+                        $(this)
+                                .closest('.message')
+                                .transition('fade')
+                        ;
+                    })
+                ;
+
+            })
+        ;
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <!-- Page Contents -->
+    <div class="pusher">
+        <div class="ui inverted vertical masthead center aligned segment">
+
+            <div class="ui container">
+                {#<div class="ui large secondary inverted pointing menu">#}
+                    {#<a class="toc item">#}
+                        {#<i class="sidebar icon"></i>#}
+                    {#</a>#}
+                    {#<a href="{{ url('homepage') }}" class="{{ path('homepage') == app.request.requestUri? 'active' : '' }}  item">خانه</a>#}
+                    {#<a href="{{ url('profile_search', {"context" : 'householder'}) }}" class="{{ path('profile_search', {"context" : 'householder'}) == app.request.requestUri? 'active' : '' }} item">جستجوی خانه</a>#}
+                    {#<a href="{{ url('profile_search', {"context" : 'housemate'}) }}" class="{{ path('profile_search', {"context" : 'housemate'}) == app.request.requestUri? 'active' : '' }} item">جتسجوی همخانه</a>#}
+                    {#<div class="right item">#}
+                        {#{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}#}
+                            {#<a href="{{ url('fos_user_profile_show') }}" class="ui primary button">پروفایل</a>#}
+                            {#<a href="{{ url('fos_user_security_logout') }}" class="ui button">خروج</a>#}
+                        {#{% else %}#}
+                            {#<a href="{{ url('fos_user_security_login') }}" class="ui button">ورود</a>#}
+                            {#<a href="{{ url('fos_user_registration_register') }}" class="ui primary button">ثبت نام</a>#}
+                        {#{% endif %}#}
+                    {#</div>#}
+                {#</div>#}
+                {{ knp_menu_render('main_menu', {"template": "menu.html.twig", "currentClass": "active"}) }}
+            </div>
+        </div>
+
+        <div id="main" class="ui container">
+
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="ui message {{ type }}">
+                            <i class="close icon"></i>
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="ui inverted vertical footer segment">
+            <div class="ui container">
+                <div class="ui stackable inverted divided equal height stackable grid">
+                    <div class="three wide column">
+                        <h4 class="ui inverted header">About</h4>
+                        <div class="ui inverted link list">
+                            <a href="#" class="item">Sitemap</a>
+                            <a href="#" class="item">Contact Us</a>
+                            <a href="#" class="item">Religious Ceremonies</a>
+                            <a href="#" class="item">Gazebo Plans</a>
+                        </div>
+                    </div>
+                    <div class="three wide column">
+                        <h4 class="ui inverted header">Services</h4>
+                        <div class="ui inverted link list">
+                            <a href="#" class="item">Banana Pre-Order</a>
+                            <a href="#" class="item">DNA FAQ</a>
+                            <a href="#" class="item">How To Access</a>
+                            <a href="#" class="item">Favorite X-Men</a>
+                        </div>
+                    </div>
+                    <div class="seven wide column">
+                        <h4 class="ui inverted header">Footer Header</h4>
+                        <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

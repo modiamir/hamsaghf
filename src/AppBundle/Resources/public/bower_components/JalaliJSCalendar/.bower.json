@@ -1,0 +1,14 @@
+{
+  "name": "JalaliJSCalendar",
+  "homepage": "https://github.com/farhadi/JalaliJSCalendar",
+  "_release": "80a559b7a8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "80a559b7a8f29f64c867d3a5f062caa9b4a7e023"
+  },
+  "_source": "git://github.com/farhadi/JalaliJSCalendar.git",
+  "_target": "*",
+  "_originalSource": "farhadi/JalaliJSCalendar",
+  "_direct": true
+}

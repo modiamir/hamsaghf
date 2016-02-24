@@ -1,0 +1,175 @@
+{% extends 'profile_layout.html.twig' %}
+
+{% block main_content %}
+    {{ form_errors(form) }}
+    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+
+    <div class="field required">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+
+    <div class="field required">
+        {{ form_label(form.regions) }}
+        {{ form_widget(form.regions) }}
+    </div>
+
+
+    <div class="one fields">
+        <div class="four wide field">
+            {{ form_label(form.minMortgage) }}
+            {{ form_widget(form.minMortgage) }}
+        </div>
+        <div class="four wide field">
+            {{ form_label(form.maxMortgage) }}
+            {{ form_widget(form.maxMortgage) }}
+        </div>
+        <div class="eight wide field">
+            <label>بازه رهن</label>
+            <div id="mortgage-slider">
+            </div>
+        </div>
+    </div>
+
+    <div class="fields">
+        <div class="four wide field">
+            {{ form_label(form.minRent) }}
+            {{ form_widget(form.minRent) }}
+        </div>
+        <div class="four wide field">
+            {{ form_label(form.maxRent) }}
+            {{ form_widget(form.maxRent) }}
+        </div>
+        <div class="eight wide field">
+            <label>بازه اجاره</label>
+            <div id="rent-slider">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="four fields">
+        <div class="field">
+            <div class="field required">
+                {{ form_label(form.jobType) }}
+                {{ form_widget(form.jobType) }}
+            </div>
+        </div>
+        <div class="field">
+            <div class="field required">
+                {{ form_label(form.smoker) }}
+                {{ form_widget(form.smoker) }}
+            </div>
+        </div>
+        <div class="field">
+            <div class="field required">
+                {{ form_label(form.culturally) }}
+                {{ form_widget(form.culturally) }}
+            </div>
+        </div>
+        <div class="field">
+            <div class="field required">
+                {{ form_label(form.wakeful) }}
+                {{ form_widget(form.wakeful) }}
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <div class="field required">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+    </div>
+    <input type="submit" value="ثبت">
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("bundles/app/bower_components/nouislider/distribute/nouislider.min.js") }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#housemate_regions').dropdown();
+            $('#housemate_jobType').dropdown();
+            $('#housemate_ageRanges').dropdown();
+            $('#housemate_features').dropdown();
+
+            var minMortgageInput = document.getElementById('housemate_minMortgage');
+            var maxMortgageInput = document.getElementById('housemate_maxMortgage');
+            var mortgageSlider = document.getElementById('mortgage-slider');
+
+            noUiSlider.create(mortgageSlider, {
+                start: [$(minMortgageInput).val(), $(maxMortgageInput).val()],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            })
+
+            mortgageSlider.noUiSlider.on('update', function (values, handle) {
+
+                var value = values[handle];
+
+                if (handle) {
+                    maxMortgageInput.value = value;
+                } else {
+                    minMortgageInput.value = value;
+                }
+            });
+
+            minMortgageInput.addEventListener('change', function () {
+                mortgageSlider.noUiSlider.set([this.value, null]);
+            });
+
+            maxMortgageInput.addEventListener('change', function () {
+                mortgageSlider.noUiSlider.set([null, this.value]);
+            });
+
+            var minRentInput = document.getElementById('housemate_minRent');
+            var maxRentInput = document.getElementById('housemate_maxRent');
+            var rentSlider = document.getElementById('rent-slider');
+
+            noUiSlider.create(rentSlider, {
+                start: [$(minRentInput).val(), $(maxRentInput).val()],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            });
+
+            rentSlider.noUiSlider.on('update', function (values, handle) {
+
+                var value = values[handle];
+
+                if (handle) {
+                    maxRentInput.value = value;
+                } else {
+                    minRentInput.value = value;
+                }
+            });
+
+            minRentInput.addEventListener('change', function () {
+                rentSlider.noUiSlider.set([this.value, null]);
+            });
+
+            maxRentInput.addEventListener('change', function () {
+                rentSlider.noUiSlider.set([null, this.value]);
+            });
+
+        })
+
+
+    </script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("bundles/app/bower_components/nouislider/distribute/nouislider.min.css") }}">
+{% endblock %}

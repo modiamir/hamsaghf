@@ -1,0 +1,373 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Homemate
+ *
+ * @ORM\Table(name="homemate")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\HomemateRepository")
+ */
+class Homemate extends Profile
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="culturally", type="integer", nullable=false)
+     */
+    private $culturally;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="age", type="integer", nullable=false)
+     */
+    private $age;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\JobType")
+     */
+    private $jobType;
+
+    /**
+     * @var Media
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image")
+     */
+    private $photo;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="homemate")
+     */
+    private $user;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Set culturally
+     *
+     * @param integer $culturally
+     * @return Homemate
+     */
+    public function setCulturally($culturally)
+    {
+        $this->culturally = $culturally;
+
+        return $this;
+    }
+
+    /**
+     * Get culturally
+     *
+     * @return integer 
+     */
+    public function getCulturally()
+    {
+        return $this->culturally;
+    }
+
+    /**
+     * Set age
+     *
+     * @param integer $age
+     * @return Homemate
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return integer 
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * Set photo
+     *
+     * @param \AppBundle\Entity\Image $photo
+     * @return Homemate
+     */
+    public function setPhoto(\AppBundle\Entity\Image $photo = null)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return \AppBundle\Entity\Image 
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * Set jobType
+     *
+     * @param \AppBundle\Entity\JobType $jobType
+     * @return Homemate
+     */
+    public function setJobType(\AppBundle\Entity\JobType $jobType = null)
+    {
+        $this->jobType = $jobType;
+
+        return $this;
+    }
+
+    /**
+     * Get jobType
+     *
+     * @return \AppBundle\Entity\JobType 
+     */
+    public function getJobType()
+    {
+        return $this->jobType;
+    }
+
+    /**
+     * Set smoker
+     *
+     * @param boolean $smoker
+     * @return Homemate
+     */
+    public function setSmoker($smoker)
+    {
+        $this->smoker = $smoker;
+
+        return $this;
+    }
+
+    /**
+     * Get smoker
+     *
+     * @return boolean 
+     */
+    public function getSmoker()
+    {
+        return $this->smoker;
+    }
+
+    /**
+     * Set guest
+     *
+     * @param boolean $guest
+     * @return Homemate
+     */
+    public function setGuest($guest)
+    {
+        $this->guest = $guest;
+
+        return $this;
+    }
+
+    /**
+     * Get guest
+     *
+     * @return boolean 
+     */
+    public function getGuest()
+    {
+        return $this->guest;
+    }
+
+    /**
+     * Set cleaning
+     *
+     * @param integer $cleaning
+     * @return Homemate
+     */
+    public function setCleaning($cleaning)
+    {
+        $this->cleaning = $cleaning;
+
+        return $this;
+    }
+
+    /**
+     * Get cleaning
+     *
+     * @return integer 
+     */
+    public function getCleaning()
+    {
+        return $this->cleaning;
+    }
+
+    /**
+     * Set wakeful
+     *
+     * @param integer $wakeful
+     * @return Homemate
+     */
+    public function setWakeful($wakeful)
+    {
+        $this->wakeful = $wakeful;
+
+        return $this;
+    }
+
+    /**
+     * Get wakeful
+     *
+     * @return integer 
+     */
+    public function getWakeful()
+    {
+        return $this->wakeful;
+    }
+
+    /**
+     * Set constrained
+     *
+     * @param integer $constrained
+     * @return Homemate
+     */
+    public function setConstrained($constrained)
+    {
+        $this->constrained = $constrained;
+
+        return $this;
+    }
+
+    /**
+     * Get constrained
+     *
+     * @return integer 
+     */
+    public function getConstrained()
+    {
+        return $this->constrained;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Homemate
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Add features
+     *
+     * @param \AppBundle\Entity\Feature $features
+     * @return Homemate
+     */
+    public function addFeature(\AppBundle\Entity\Feature $features)
+    {
+        $this->features[] = $features;
+
+        return $this;
+    }
+
+    /**
+     * Remove features
+     *
+     * @param \AppBundle\Entity\Feature $features
+     */
+    public function removeFeature(\AppBundle\Entity\Feature $features)
+    {
+        $this->features->removeElement($features);
+    }
+
+    /**
+     * Get features
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeatures()
+    {
+        return $this->features;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     * @return Homemate
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add regions
+     *
+     * @param \AppBundle\Entity\Region $regions
+     * @return Homemate
+     */
+    public function addRegion(\AppBundle\Entity\Region $regions)
+    {
+        $this->regions[] = $regions;
+
+        return $this;
+    }
+
+    /**
+     * Remove regions
+     *
+     * @param \AppBundle\Entity\Region $regions
+     */
+    public function removeRegion(\AppBundle\Entity\Region $regions)
+    {
+        $this->regions->removeElement($regions);
+    }
+
+    /**
+     * Get regions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRegions()
+    {
+        return $this->regions;
+    }
+}

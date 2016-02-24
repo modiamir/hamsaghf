@@ -1,0 +1,58 @@
+{% extends "default/layout.html.twig" %}
+
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+{% if error %}
+    <div class="ui message error">
+        <i class="close icon"></i>
+        <div class="header">
+          خطا!
+        </div>
+        <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+    </div>
+{% endif %}
+
+    <div class="ui one column center aligned grid">
+        <div class="column six wide form-holder">
+            <h2 class="center aligned header form-head">ورود</h2>
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <div class="ui form">
+                    <div class="field">
+                        <input
+                            type="text"
+                            id="username"
+                            name="_username"
+                            value="{{ last_username }}"
+                            placeholder="نام کاربری"
+                            required="required" />
+                    </div>
+                    <div class="field">
+                        <input
+                            type="password"
+                            id="password"
+                            name="_password"
+                            required="required"
+                            placeholder="رمز عبور" />
+                    </div>
+                    <div class="field">
+                        <input
+                            type="submit"
+                            id="_submit"
+                            name="_submit"
+                            value="{{ 'security.login.submit'|trans }}"
+                            class="ui button large fluid green">
+                    </div>
+                    <div class="inline field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                            <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

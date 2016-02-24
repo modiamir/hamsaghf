@@ -1,0 +1,13 @@
+{% extends ':profile:search_layout.html.twig' %}
+
+{% block search_content %}
+
+    <h2 class="ui">Housemates</h2>
+    <div class="ui link cards">
+        {% for profile in pagination %}
+            {{ include(':housemate:list.html.twig', {"profile": profile}) }}
+        {% endfor %}
+    </div>
+
+{% endblock %}
+

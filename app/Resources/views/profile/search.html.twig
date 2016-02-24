@@ -1,0 +1,197 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block content %}
+{# total items count #}
+
+    <div class="ui segment">
+        {{ form_errors(filter) }}
+        {{ form_start(filter, {'attr': {'class': 'ui form'}}) }}
+
+        <div class="two fields">
+            <div class="field">
+                {{ form_label(filter.regions) }}
+                {{ form_widget(filter.regions) }}
+            </div>
+            <div class="field">
+                {{ form_label(filter.jobTypes) }}
+                {{ form_widget(filter.jobTypes) }}
+            </div>
+        </div>
+
+
+        <div class="one fields">
+            <div class="one wide field"></div>
+            <div class="six wide field">
+                {{ form_widget(filter.minMortgage) }}
+                {{ form_widget(filter.maxMortgage) }}
+                <label>بازه رهن</label>
+                    <div id="mortgage-slider">
+                    </div>
+                <div class="ui grid">
+                    <div id="max-mortgage-value" class="left floated five wide column">
+                    </div>
+                    <div id="min-mortgage-value" class="right floated five wide column">
+                    </div>
+                </div>
+            </div>
+            <div class="two wide field"></div>
+            <div class="six wide field">
+                {{ form_widget(filter.minRent) }}
+                {{ form_widget(filter.maxRent) }}
+                <label>بازه اجاره</label>
+                <div id="rent-slider">
+                </div>
+                <div class="ui grid">
+                    <div id="max-rent-value" class="left floated five wide column">
+                    </div>
+                    <div id="min-rent-value" class="right floated five wide column">
+                    </div>
+                </div>
+            </div>
+            <div class="one wide field"></div>
+        </div>
+
+        {{ form_widget(filter.submit, {"attr": {"class": "ui button"}}) }}
+
+        {{ form_end(filter) }}
+    </div>
+
+
+
+
+    <div class="count">
+    {{ pagination.getTotalItemCount }}
+</div>
+
+<table>
+    <tr>
+        {# sorting of properties based on query components #}
+        <th>{{ knp_pagination_sortable(pagination, 'Id', 'p.id') }}</th>
+        <th{% if pagination.isSorted('p.Title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Title', 'p.title') }}</th>
+    </tr>
+
+    {# table body #}
+    {% for profile in pagination %}
+        <tr {% if loop.index is odd %}class="color"{% endif %}>
+            <td>{{ profile.id }}</td>
+
+            <td>{{ profile.updated | date('Y-m-d') }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{# display navigation #}
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset("bundles/app/bower_components/nouislider/distribute/nouislider.min.js") }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('#householder_filter_regions').dropdown();
+            $('#householder_filter_jobTypes').dropdown();
+
+
+            var minMortgageInput = document.getElementById('householder_filter_minMortgage');
+            var maxMortgageInput = document.getElementById('householder_filter_maxMortgage');
+            var mortgageSlider = document.getElementById('mortgage-slider');
+
+            noUiSlider.create(mortgageSlider, {
+                start: [
+                    $(minMortgageInput).val() ? $(minMortgageInput).val() : 0,
+                    $(maxMortgageInput).val() ? $(maxMortgageInput).val() : 100
+                ],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            })
+
+            mortgageSlider.noUiSlider.on('update', function( values, handle ) {
+
+                var value = values[handle];
+
+                if ( handle ) {
+                    maxMortgageInput.value = value;
+                    $('#max-mortgage-value').text(value + ' میلیون تومان');
+                } else {
+                    minMortgageInput.value = value;
+                    $('#min-mortgage-value').text(value + ' میلیون تومان');
+                }
+            });
+
+
+            minMortgageInput.addEventListener('change', function(){
+                mortgageSlider.noUiSlider.set([this.value, null]);
+            });
+
+            maxMortgageInput.addEventListener('change', function(){
+                mortgageSlider.noUiSlider.set([null, this.value]);
+            });
+
+            var minRentInput = document.getElementById('householder_filter_minRent');
+            var maxRentInput = document.getElementById('householder_filter_maxRent');
+            var rentSlider = document.getElementById('rent-slider');
+
+            noUiSlider.create(rentSlider, {
+                start: [
+                    $(minRentInput).val() ? $(minRentInput).val() : 0,
+                    $(maxRentInput).val() ? $(maxRentInput).val() : 100
+                ],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            })
+
+            rentSlider.noUiSlider.on('update', function( values, handle ) {
+
+                var value = values[handle];
+
+                if ( handle ) {
+                    maxRentInput.value = value;
+                    $('#max-rent-value').text(value + ' میلیون تومان');
+                } else {
+                    minRentInput.value = value;
+                    $('#min-rent-value').text(value + ' میلیون تومان');
+                }
+            });
+
+            minRentInput.addEventListener('change', function(){
+                rentSlider.noUiSlider.set([this.value, null]);
+            });
+
+            maxRentInput.addEventListener('change', function(){
+                rentSlider.noUiSlider.set([null, this.value]);
+            });
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+<link rel="stylesheet" href="{{ asset("bundles/app/bower_components/nouislider/distribute/nouislider.min.css") }}">
+
+    <style>
+        #min-mortgage-value,#min-rent-value {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        #max-mortgage-value, #max-rent-value {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        #householder_filter_minMortgage, #householder_filter_maxMortgage,
+        #householder_filter_minRent, #householder_filter_maxRent{
+            display: none;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,39 @@
+<div class="item">
+    <div class="image">
+        <img class="ui rounded image" src="{{ profile.photos[0].webPath |imagine_filter('thumb') }}" />
+    </div>
+    <div class="content">
+        <a class="header">{{ profile.id }} - {{ profile.title }}</a>
+
+        <div class="description">
+            <p>{{ profile.description }}</p>
+        </div>
+
+            {% if profile.regions is not empty %}
+            <div class="meta">
+                <label> موقعیت :</label>
+                {% for region in profile.regions %}
+                    <span class="ui small label blue">
+                        {{ region.name }}
+                    </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if profile.jobTypes is not empty %}
+            <div class="meta">
+                <label> شغل :</label>
+                {% for jobType in profile.jobTypes %}
+                    <span class="ui small label">
+                        {{ jobType.name }}
+                    </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        <div class="extra">
+            <label>
+                تاریخ: {{ profile.updated | jdate("l j F Y H:i") }}
+            </label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+/* line 1, ../sass/style.scss */
+.hidden.menu {
+  display: none;
+}
+
+/*.masthead.segment {*/
+/*min-height: 700px;*/
+/*padding: 1em 0em;*/
+/*}*/
+/*.masthead .logo.item img {*/
+/*margin-right: 1em;*/
+/*}*/
+/* line 12, ../sass/style.scss */
+.masthead .ui.menu .ui.button {
+  margin-left: 0.5em;
+}
+
+/*.masthead h1.ui.header {*/
+/*margin-top: 3em;*/
+/*margin-bottom: 0em;*/
+/*font-size: 4em;*/
+/*font-weight: normal;*/
+/*}*/
+/*.masthead h2 {*/
+/*font-size: 1.7em;*/
+/*font-weight: normal;*/
+/*}*/
+/* line 26, ../sass/style.scss */
+.ui.vertical.stripe {
+  padding: 8em 0em;
+}
+
+/* line 29, ../sass/style.scss */
+.ui.vertical.stripe h3 {
+  font-size: 2em;
+}
+
+/* line 32, ../sass/style.scss */
+.ui.vertical.stripe .button + h3,
+.ui.vertical.stripe p + h3 {
+  margin-top: 3em;
+}
+
+/* line 36, ../sass/style.scss */
+.ui.vertical.stripe .floated.image {
+  clear: both;
+}
+
+/* line 39, ../sass/style.scss */
+.ui.vertical.stripe p {
+  font-size: 1.33em;
+}
+
+/* line 42, ../sass/style.scss */
+.ui.vertical.stripe .horizontal.divider {
+  margin: 3em 0em;
+}
+
+/* line 46, ../sass/style.scss */
+.quote.stripe.segment {
+  padding: 0em;
+}
+
+/* line 49, ../sass/style.scss */
+.quote.stripe.segment .grid .column {
+  padding-top: 5em;
+  padding-bottom: 5em;
+}
+
+/* line 54, ../sass/style.scss */
+.footer.segment {
+  padding: 5em 0em;
+}
+
+/* line 58, ../sass/style.scss */
+.secondary.pointing.menu .toc.item {
+  display: none;
+}
+
+@media only screen and (max-width: 700px) {
+  /* line 63, ../sass/style.scss */
+  .ui.fixed.menu {
+    display: none !important;
+  }
+
+  /* line 66, ../sass/style.scss */
+  .secondary.pointing.menu .item,
+  .secondary.pointing.menu .menu {
+    display: none;
+  }
+
+  /* line 70, ../sass/style.scss */
+  .secondary.pointing.menu .toc.item {
+    display: block;
+  }
+
+  /* line 73, ../sass/style.scss */
+  .masthead.segment {
+    min-height: 350px;
+  }
+
+  /* line 76, ../sass/style.scss */
+  .masthead h1.ui.header {
+    font-size: 2em;
+    margin-top: 1.5em;
+  }
+
+  /* line 80, ../sass/style.scss */
+  .masthead h2 {
+    margin-top: 0.5em;
+    font-size: 1.5em;
+  }
+}
+/* line 87, ../sass/style.scss */
+#main.ui.container {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
